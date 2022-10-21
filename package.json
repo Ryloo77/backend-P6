@@ -1,0 +1,18 @@
+{
+  "name": "hot_takes",
+  "version": "1.0.0",
+  "description": "Projet P6 - créer API sécurisée",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^6.6.5"
+  }
+}
