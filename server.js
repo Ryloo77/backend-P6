@@ -48,15 +48,3 @@ const normalizePort = val => {
   });
   
   server.listen(port);
-/* ----------- fin amélioration proposée dans le cours-----------*/
-
-
-/* code avant l'amélioration proposé dans le cours */
-// // On dit à l'application express sur que port on va tourner 
-// app.set('port', process.env.PORT || 3000);
-// // on va passer à notre server cette application
-// const server = http.createServer(app);
-// //On configure le serveur pour qu'il écoute :
-// // soit la variable d'environnement du port grâce à "process.env.PORT" si la variable environnement propose un port par defaut
-// // soit le port 3000, ce qui nous servira dans notre plateforme de developpement
-// server.listen(process.env.PORT || 3000);
