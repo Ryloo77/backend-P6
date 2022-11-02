@@ -9,10 +9,10 @@ const saucesSchema = mongoose.Schema({
     mainPepper: {type: String, required: true},
     imageUrl: {type: String, required: true},
     heat: {type: Number, required:true},
-    // likes: {type: Number},
-    // dislikes: {type: Number},
-    // usersLiked: {type:String},
-    // usersDisliked:{type:String}
+    likes: {type: Number},
+    dislikes: {type: Number},
+    usersLiked: {type:[String]},
+    usersDisliked:{type:[String]},
 })
 
 // on exporte ce schema vers notre BD sous forme de model du nom de "sauces" pour lequel on passe le userSchema
