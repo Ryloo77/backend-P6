@@ -10,7 +10,7 @@ exports.likeSauces = (req, res, next) => {
   console.log(sauceId)
 
   Sauces.findOne({
-    sauceId
+    _id: sauceId
   })
     .then(
       (sauce) => {
@@ -24,8 +24,12 @@ exports.likeSauces = (req, res, next) => {
                 }
               )
 
-                .then(() => res.satus(201).json({ message: " Dislike +1" }))
+                .then(() => res.status(200).json({ message: " Dislike +1" }))
                 .catch((error) => { res.status(400).json({ error: error }) })
+            }
+            //ajout d'un message d'erreur si l'utilisateur a déjà disliké
+            else if (sauce.usersDisliked.includes(userId) && like === -1) {
+              res.status(400).json({ error: error })
             }
             break;
 
@@ -38,17 +42,17 @@ exports.likeSauces = (req, res, next) => {
                   $pull: { usersLiked: userId }
                 }
               )
-                .then(() => res.satus(201).json({ message: " like -1" }))
+                .then(() => res.status(200).json({ message: " like -1" }))
                 .catch((error) => { res.status(400).json({ error: error })})
             }
             else if (sauce.usersDisliked.includes(userId) && like === 0) {
-              sauce.updateOne({ _id: sauceId },
+              Sauces.updateOne({ _id: sauceId },
                 {
                   $inc: { dislikes: -1 },
                   $pull: { usersDisliked: userId }
                 }
               )
-                .then(() => res.satus(201).json({ message: " Dislike -1" }))
+                .then(() => res.status(200).json({ message: " Dislike -1" }))
                 .catch((error) => { res.status(400).json({ error: error }) })
             }
           break;
@@ -63,8 +67,11 @@ exports.likeSauces = (req, res, next) => {
                 }
               )
 
-                .then(() => res.satus(201).json({ message: " like +1" }))
+                .then(() => res.status(200).json({ message: " like +1" }))
                 .catch((error) => { res.status(400).json({ error: error }) })
+            }
+            else if (sauce.usersLiked.includes(userId) && like === 1) {
+              res.status(400).json({ error: error })
             }
             //l'utilisateur ne peut pas liker s'il est déjà présent dans le tableau
 

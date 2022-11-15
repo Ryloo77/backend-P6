@@ -32,7 +32,7 @@ app.use((req, res, next) => {
     next();
   });
 
-  // création d'une requête post envoyé a l'API qui envoie les infos du formulaire  au format.json  
+  // création d'une requête post envoyé a l'API qui envoie les infos du au format.json  
   app.use('/api/sauces', saucesRoutes);
   app.use('/api/auth', userRoutes);
   app.use('/images', express.static(path.join(__dirname, 'images')));
