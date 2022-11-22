@@ -24,12 +24,12 @@ exports.likeSauces = (req, res, next) => {
                 }
               )
 
-                .then(() => res.status(200).json({ message: " Dislike +1" }))
-                .catch((error) => { res.status(400).json({ error: error }) })
+                .then(() => res.status(200).json({ message: "dislike ajouté" }))
+                .catch((error) => { res.status(400).json({ error: "erreur lors du dislike" }) })
             }
             //ajout d'un message d'erreur si l'utilisateur a déjà disliké
             else if (sauce.usersDisliked.includes(userId) && like === -1) {
-              res.status(400).json({ error: error })
+              res.status(400).json({ error: "dislike déjà enregistré"})
             }
             break;
 
@@ -42,8 +42,8 @@ exports.likeSauces = (req, res, next) => {
                   $pull: { usersLiked: userId }
                 }
               )
-                .then(() => res.status(200).json({ message: " like -1" }))
-                .catch((error) => { res.status(400).json({ error: error })})
+                .then(() => res.status(200).json({ message: " like enlevé" }))
+                .catch((error) => { res.status(400).json({ error: "erreur sur l'annulation du like" })})
             }
             else if (sauce.usersDisliked.includes(userId) && like === 0) {
               Sauces.updateOne({ _id: sauceId },
@@ -52,8 +52,8 @@ exports.likeSauces = (req, res, next) => {
                   $pull: { usersDisliked: userId }
                 }
               )
-                .then(() => res.status(200).json({ message: " Dislike -1" }))
-                .catch((error) => { res.status(400).json({ error: error }) })
+                .then(() => res.status(200).json({ message: " dislike enlevé" }))
+                .catch((error) => { res.status(400).json({ error: "erreur sur l'annulation du dislike" }) })
             }
           break;
 
@@ -67,18 +67,18 @@ exports.likeSauces = (req, res, next) => {
                 }
               )
 
-                .then(() => res.status(200).json({ message: " like +1" }))
-                .catch((error) => { res.status(400).json({ error: error }) })
+                .then(() => res.status(200).json({ message: " like ajouté" }))
+                .catch((error) => { res.status(400).json({ error: "erreur lors du like" }) })
             }
             else if (sauce.usersLiked.includes(userId) && like === 1) {
-              res.status(400).json({ error: error })
+              res.status(400).json({ error: "like déjà enregistré"})
             }
             //l'utilisateur ne peut pas liker s'il est déjà présent dans le tableau
 
 
             break;
           default:
-            return res.status(500).json({ error });
+            return res.status(500).json({ error : "erreur inconnue" });
         }
 
       }
@@ -87,35 +87,3 @@ exports.likeSauces = (req, res, next) => {
     )
     .catch((error) => { res.status(400).json({ error }) });
 }
-
-// exports.likeSauces = (req, res, next) => {
-//         Sauces.findOne({ _id: req.params.id })
-//           .then((sauce) => {
-//             console.log(req.auth.userId);
-//             console.log(sauce.userId);
-//             if (!sauce.userId.includes(req.body.userId) && req.body.like === 1) {
-//               Sauces.updateOne(
-//                 { _id: req.params.id },
-//                 {
-//                   $inc: { likes: 1 },
-//                   $push: { likeSauces: req.body.userId }
-//                 }
-//               )
-//                 .then(() => res.satus(201).json({ message: " like +1" }))
-//                 .catch(
-//                   (error) => {
-//                     res.status(400).json({
-//                       error: error
-//                     });
-//                   }
-//                 );
-//             }
-//           })
-//           .catch(
-//             (error) => {
-//               res.status(400).json({
-//                 error: error
-//               });
-//             }
-//           )
-//       }
