@@ -1,4 +1,8 @@
-// on import express
+//importation  de Dotenv
+require('dotenv').config()
+//express rate limit
+const rateLimit = require("express-rate-limit")
+// on importe express (framework qui facilite la création et gestion des serveur Node)
 const express = require('express');
 //on importe mongoose
 const mongoose = require('mongoose');
@@ -7,8 +11,17 @@ const saucesRoutes = require('./routes/sauces')
 const userRoutes = require('./routes/user')
 const path = require('path')
 
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+})
+
+
+
 //Création de la fonction qui va communiquer avec notre BD sur MongoDB
-mongoose.connect('mongodb+srv://CyrilP6:1234@cluster0.fxbwptu.mongodb.net/?retryWrites=true&w=majority',
+mongoose.connect(process.env.MONGO_URL,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
@@ -16,6 +29,8 @@ mongoose.connect('mongodb+srv://CyrilP6:1234@cluster0.fxbwptu.mongodb.net/?retry
 
 // on appelle la methode express pour créer l'application express
 const app = express();
+// Apply the rate limiting middleware to all requests
+app.use(limiter)
 
 //gestion de la requête POST venant du frontend - donne l'accè aux coeur de la requête
 //donne l'accès à req.body (le corps de la requête)

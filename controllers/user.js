@@ -32,7 +32,7 @@ exports.login = (req, res, next) => {
                                 //la methode sign du package jsonwebtoken utilise une clé secrète pour chiffrer un token
                                 token: jwt.sign(
                                     { userId: user._id },
-                                    'RANDOM_TOKEN_SECRET',
+                                    process.env.SECRET_TOKEN,
                                     {expiresIn: '24h'}
                                 )
                             });
