@@ -35,11 +35,9 @@ mongoose.connect(process.env.MONGO_URL,
 const app = express();
 // Apply the rate limiting middleware to all requests
 app.use(limiter)
-
-//gestion de la requête POST venant du frontend - donne l'accè aux coeur de la requête
-//donne l'accès à req.body (le contenu du corps de la requête)
+//Middleware qui intercepte les requêtes ayant un contenu json (POST) et met a disposition le contenu (le corps de la requête) sur l'objet requête (req.body)
 app.use(express.json());
-//ce middleware intercepte toutes les requetes quoi contiennent du json et nous mettes a disposition le corps de la requete sur l'objet requete dans req.body
+//bodyparser etait utilisé avant la méthode ci dessus
 
     /* -------------------------- Gestion du CORS (interaction entre serveurs et navigateurs) -------------------------------*/
 //ajout de middleware headers de contrôle d'accès (CORS) qui permettent =
@@ -56,8 +54,9 @@ app.use((req, res, next) => {
     /* -------------------------- fin gestion du CORS -------------------------------*/
  
     /* -------------------------- utilisation des routers avec les début de chaque routes -------------------------------*/
-  app.use('/api/sauces', saucesRoutes);
+  app.use('/api/sauces', saucesRoutes);//pour la route /api/sauces on utilise le router saucesRoutes
   app.use('/api/auth', userRoutes);
+  //utilisation d'express.static pour stocker les images de façons statique 
   app.use('/images', express.static(path.join(__dirname, 'images')));
 
 //on exporte cette application pour y acceder depuis les autres fichiers de notre projet, notamment notre server Node

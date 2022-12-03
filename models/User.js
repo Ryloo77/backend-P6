@@ -10,5 +10,5 @@ const userSchema = mongoose.Schema({
 })
 //on applique le validateur au schema afin qu'il vérifie les entrées de BD en double et les signale comme n'importe quelle autre erreur
 userSchema.plugin(uniqueValidator);
-// on export ce schema sous forme de model du nom de "user" pour lequel on passe le userSchema
+// on export ce schema sous forme de model du nom de "User" pour lequel on passe le userSchema
 module.exports = mongoose.model('User', userSchema);

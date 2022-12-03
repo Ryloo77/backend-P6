@@ -2,6 +2,7 @@ const Sauces = require('../models/Sauces');
 const fs = require('fs');
 
 /* -------------------------- Logique Metiers de chaque route-------------------------------*/
+//Création d'une sauce
 exports.createSauces = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce);
   delete sauceObject._id;
@@ -19,8 +20,10 @@ exports.createSauces = (req, res, next) => {
     })
 };
 
+//On va chercher une seule sauce en fonction de son id
 exports.getOneSauces = (req, res, next) => {
   Sauces.findOne({
+    //l'id de la sauce doit correspondre au paramètre de requête(.../sauce/:id)
     _id: req.params.id
   }).then(
     (sauce) => {
@@ -35,6 +38,7 @@ exports.getOneSauces = (req, res, next) => {
   );
 };
 
+//modification d'une sauce (route PUT)
 exports.modifySauces = (req, res, next) => {
   const sauceObject = req.file ? {
     ...req.body,
@@ -47,6 +51,7 @@ exports.modifySauces = (req, res, next) => {
       if (sauce.userId != req.auth.userId) {
         res.status(403).json({ message: 'unauthorized request' });
       } else {
+        // methode updateOne pour mettre à jour.
         Sauces.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
           .then(() => res.status(200).json({ message: 'Objet modifié!' }))
           .catch(error => res.status(401).json({ error }));
@@ -76,6 +81,7 @@ exports.deleteSauces = (req, res, next) => {
       });
 };
 
+//récupération des éléments sauces du tableau (page ALL SAUCES)
 exports.getAllSauces = (req, res, next) => {
   Sauces.find().then(
     (sauces) => {
