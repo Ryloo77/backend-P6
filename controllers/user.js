@@ -1,11 +1,18 @@
 //oon importe notre modèle user
 const User = require('../models/User')
-// on importe le package de crypatge pour les mots de passe (bcrypt)
+// on importe le package de crypatge pour le hashage des mots de passe (bcrypt)
 const bcrypt = require('bcrypt');
-//On importe jsonwebToken ("permet de creer des token et les vérifier")
+//On importe jsonwebToken (permet de creer des tokens concernant les userId et les vérifier)
 const jwt = require('jsonwebtoken')
+//on importe le package email validator
+const mailValidator = require('email-validator')
 
 exports.signup = (req, res, next) => {
+    //on applique mailValidator et on ajoute une erreur en cas de mail invalide
+    const mailIsValide = mailValidator.validate(req.body.email)
+    if(!mailIsValide) {
+        return res.status(400).json ({ message : "email invalide"})
+    }
     //on commence par hacher le mot de passe avec bcrypt.hash après l'avoir récupéré et on execute 10 fois l'algorythme de hashage
     bcrypt.hash(req.body.password, 10)
         // on récupère le hash de mot de passe
@@ -35,12 +42,13 @@ exports.login = (req, res, next) => {
                     .then(valid => {
                         if (!valid) {
                             // le mot de passe est incorrecte
-                            res.status(401).json({ message: 'Paire identifiant/mot de passse incorrecte' })
+                            res.status(401).json({ message: 'Paire identifiant/mot de passe incorrecte' })
                         } else {
+                            //si le mot de passe est correct, on retourne un objet qui contient les infos nécéssaires à l'envoie des requêtes par le client :
                             res.status(200).json({
-                                // lorsque la réponse est correcte on renvoie une réponse contenant l'userId et un token (pour authentifier les requêtes)
+                                // l'userId
                                 userId: user._id,
-                                //la methode sign du package jsonwebtoken utilise une clé secrète pour chiffrer un token
+                                //un Token
                                 token: jwt.sign(
                                     //1er argument on encode l'userId avec jsonwebtoken (on passe les arguments que l'on veut encoder)
                                     { userId: user._id },

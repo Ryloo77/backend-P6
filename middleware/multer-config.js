@@ -13,13 +13,16 @@ const MIME_TYPES = {
 const storage = multer.diskStorage({
     //la destination (dossier images)
     destination: (req, file, callback) => {
+        //on appelle le callback avec deux arguments :
+        //1er argument null pour spécifié qu'il n'y a pas d'erreur
+        //2eme argument qui spécifie le nom du dossier
         callback(null, 'images')
     },
-    //quels sont les noms de fichiers à utiliser
+    //les noms de fichiers à utiliser
     filename: (req, file, callback) => {
         //nom d'origine du fichier pour lequel on supprime les éventuelles espaces avec la methode split (on squiz)
         const name = file.originalname.split(' ').join('_');
-        //on applique un extention au fichier avec les MIME_TYPES
+        //on applique une extention au fichier avec les MIME_TYPES
         const extension = MIME_TYPES[file.mimetype];
         //on appelle le callback : name passé au dessus + times type + . + extentions du fichier
         callback(null, name + Date.now() + '.' + extension);

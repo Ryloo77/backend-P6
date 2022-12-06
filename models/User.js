@@ -1,6 +1,6 @@
 //on import Mongoose
 const mongoose = require('mongoose');
-//import le package mongoose-unique-validator pour éviter les érreurs de lecture en cas de mail unique
+//import le package mongoose-unique-validator pour éviter les erreurs de lecture en cas de mail unique
 const uniqueValidator = require('mongoose-unique-validator')
 //on utilise la fonction schema de mongoose pour créer notre schéma user
 const userSchema = mongoose.Schema({

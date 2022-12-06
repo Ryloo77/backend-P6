@@ -1,8 +1,8 @@
 //importation  de Dotenv
 require('dotenv').config()
-//express rate limit
+//on importe rateLimite d'Express utile pour limiter les demandes répétées
 const rateLimit = require("express-rate-limit")
-// on importe express (framework qui facilite la création et gestion des serveur Node)
+// on importe express (framework qui facilite la création et gestion des serveurs Node)
 const express = require('express');
 //on importe mongoose pour communiquer avec MongoDB
 const mongoose = require('mongoose');
@@ -12,19 +12,22 @@ const saucesRoutes = require('./routes/sauces')
 const userRoutes = require('./routes/user')
     /* -------------------------- Fin d'importation des routers-------------------------------*/
 
+// on importe path pour la récupération de fichier join (utilisé par la route vers le dossier image)
 const path = require('path')
 
+//Configuration de rate-limit pour limiter le débit à toutes les requetes dans le serveur
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000, // 15 minutes
-	max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
-	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+	max: 100, // limite chaque IP à 100 requêtes par "fenêtre" (ici, par 15 minutes)
+	standardHeaders: true, // renvoi les informations de limite de taux dans les entête 'ratelimit'
+	legacyHeaders: false, // Désactive les entêtes rate-limit
 })
 
 
 
     /* -------------------------- Logique de connexion à MongoDB -------------------------------*/
-mongoose.connect(process.env.MONGO_URL,
+// on appelle notre code de connexion de connexion MONGO_URL contenu dans le dossier .env
+    mongoose.connect(process.env.MONGO_URL,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
@@ -33,9 +36,9 @@ mongoose.connect(process.env.MONGO_URL,
 
 // on crée la constante app qui appelle la methode express
 const app = express();
-// Apply the rate limiting middleware to all requests
+//On applique le middleware de limitation sur toutes les requêtes
 app.use(limiter)
-//Middleware qui intercepte les requêtes ayant un contenu json (POST) et met a disposition le contenu (le corps de la requête) sur l'objet requête (req.body)
+//Middleware qui intercepte les requêtes ayant un contenu json (POST) et met a disposition le contenu (le corps de la requête) sur l'objet requête (dans "req.body")
 app.use(express.json());
 //bodyparser etait utilisé avant la méthode ci dessus
 
@@ -56,7 +59,7 @@ app.use((req, res, next) => {
     /* -------------------------- utilisation des routers avec les début de chaque routes -------------------------------*/
   app.use('/api/sauces', saucesRoutes);//pour la route /api/sauces on utilise le router saucesRoutes
   app.use('/api/auth', userRoutes);
-  //utilisation d'express.static pour stocker les images de façons statique 
+  //utilisation d'express.static (middleware) pour permettre l'accès à des ressources statiques tel que les images
   app.use('/images', express.static(path.join(__dirname, 'images')));
 
 //on exporte cette application pour y acceder depuis les autres fichiers de notre projet, notamment notre server Node

@@ -2,7 +2,7 @@
 const express = require('express');
 // on récupère le middleware d'authentification pour l'éxécuter 
 const auth = require('../middleware/auth');
-
+// on récupère le middleware pour la gestion des fichiers images 
 const multer = require('../middleware/multer-config')
 //on créer un router avec la methode router d'express
 const router = express.Router();
@@ -12,7 +12,7 @@ const saucesCtrl = require('../controllers/sauces');
 const like = require('../controllers/like');
 
 // on créer la logique de routing (CRUD) qui fait appelle à chaques logique metiers du "controller"
-// on pense a ajouter notre middleware dans notre router avant nos gestionnaire de route (ordre logique)
+// on pense a ajouter nos middlewares (auth et multer) dans notre router avant nos gestionnaire de route (ordre logique)
 router.get('/', auth, saucesCtrl.getAllSauces);
 router.post('/', auth, multer, saucesCtrl.createSauces);
 router.get('/:id', auth, saucesCtrl.getOneSauces);

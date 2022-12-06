@@ -1,5 +1,5 @@
 /* ----   création du code pour le serveur node ----*/
-// on importe le package http de node qui permet de créer un server
+// on importe le package http de node qui nous permet de créer un server
 const http = require('http');
 // on importe  l'application express qui avec été configuré en export dans l'appli (app.js)
 const app = require('./app')
@@ -41,7 +41,6 @@ const normalizePort = val => {
         throw error;
     }
   };
-/* ----------- Fin amélioration proposée dans le cours-----------*/
 
   //On appelle la methode CreatServer du package http qui prend comme argument la fonction (app) appelé à chaque requête reçu par le serveur
   const server = http.createServer(app);
@@ -52,5 +51,7 @@ const normalizePort = val => {
     const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
     console.log('Listening on ' + bind);
   });
+/* ----------- Fin amélioration proposée dans le cours-----------*/
+
   // on écoute les requête envoyé par le server avec la methode listen du serveur sur le port a écouter
   server.listen(port);

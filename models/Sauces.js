@@ -16,5 +16,5 @@ const saucesSchema = mongoose.Schema({
     usersDisliked:{type:[String]},
 })
 
-// on exporte ce schema vers notre BD sous forme de model du nom de "sauces" pour lequel on passe le saucesSchema
+// on exporte ce schema vers notre BD sous forme de model du nom de "Sauces" pour lequel on passe le saucesSchema
 module.exports = mongoose.model('Sauces', saucesSchema);
