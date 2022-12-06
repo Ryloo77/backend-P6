@@ -56,14 +56,21 @@ exports.modifySauces = (req, res, next) => {
       if (sauce.userId != req.auth.userId) {
         res.status(401).json({ message: 'unauthorized request' });
       } else {
-        const filename = sauce.imageUrl.split('/images/')[1];
-        //on utilise fs.unlink pour supprimer un fichier (ici l'image)
-        fs.unlink(`images/${filename}`, () => {
-        // methode updateOne pour mettre à jour.
+        // si req.file existe, une nouvelle image arrive, on supprime l'ancienne
+        if (req.file) {
+          const filename = sauce.imageUrl.split('/images/')[1];
+          fs.unlink(`images/${filename}`, () => {
+            // methode updateOne pour mettre à jour.
+            Sauces.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+              .then(() => res.status(200).json({ message: 'Objet modifié!' }))
+              .catch(error => res.status(401).json({ error }));
+          })
+          //sinon, on ne change pas l'image et un update les changemements
+        } else {
           Sauces.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
-          .then(() => res.status(200).json({ message: 'Objet modifié!' }))
-          .catch(error => res.status(401).json({ error }));
-        });
+            .then(() => res.status(200).json({ message: 'Objet modifié!' }))
+            .catch(error => res.status(401).json({ error }));
+        }
       }
     })
     .catch((error) => {

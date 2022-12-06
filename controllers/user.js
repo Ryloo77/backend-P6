@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken')
 const mailValidator = require('email-validator')
 
 exports.signup = (req, res, next) => {
-    //on applique mailValidator et on ajoute une erreur en cas de mail invalide
+    //on applique mailValidator pour vérifier l'email et on ajoute une erreur en cas de mail invalide (false)
     const mailIsValide = mailValidator.validate(req.body.email)
     if(!mailIsValide) {
         return res.status(400).json ({ message : "email invalide"})
