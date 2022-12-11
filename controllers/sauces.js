@@ -25,7 +25,7 @@ exports.createSauces = (req, res, next) => {
     })
 };
 
-//On va chercher une seule sauce en fonction de son id
+//On va cherche une seule sauce en fonction de son id
 exports.getOneSauces = (req, res, next) => {
   Sauces.findOne({
     //l'id de la sauce doit correspondre au paramètre de requête(.../sauce/:id)
